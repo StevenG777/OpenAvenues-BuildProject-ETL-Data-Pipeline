@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>OpenAvenues · Project Roadmap</title>
+<style>
+:root{--bg:#f6f8fc;--paper:#fff;--ink:#19253a;--muted:#5b687c;--accent:#277b66;--border:#dee4eb;--accentLight:#e6f4ee;}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 system-ui,-apple-system,Segoe UI,sans-serif;}
+.wrapper{max-width:1050px;margin:0 auto;padding:26px 24px 100px}
+header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+.header-inner{max-width:1050px;margin:auto;padding:12px 24px;display:flex;align-items:center;flex-wrap:wrap;gap:12px;justify-content:space-between}
+.brand{font-weight:800;letter-spacing:-.02em}.sub{color:var(--muted);font-size:12px}.actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+button{cursor:pointer;border:1px solid var(--border);border-radius:8px;background:white;padding:9px 13px;font:600 13px system-ui;color:var(--ink)}button:hover{background:#eff4f8}
+button.primary{background:var(--accent);border-color:var(--accent);color:white}button.primary:hover{background:#1e6755}
+main{background:var(--paper);border:1px solid var(--border);border-radius:14px;padding:34px 44px;box-shadow:0 5px 30px rgba(30,41,59,.045)}
+h1{font-size:2rem;line-height:1.2;letter-spacing:-.035em;margin:0 0 20px}h2{font-size:1.42rem;margin:40px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--border);letter-spacing:-.02em}h3{font-size:1.16rem;margin:29px 0 9px}h4{font-size:1rem;margin:23px 0 7px}
+p{margin:12px 0}blockquote{border-left:3px solid var(--accent);margin:15px 0;padding:2px 18px;color:#425067;background:#f6faf8}
+a{color:#226d9d}code{background:#eef3f7;padding:2px 5px;border-radius:4px;font-size:.91em}pre{overflow:auto;background:#132034;color:#e9f4fc;padding:19px;border-radius:10px;line-height:1.5}pre code{background:none;padding:0;color:inherit}
+table{border-collapse:collapse;width:100%;margin:15px 0 24px;font-size:.92rem;display:block;overflow-x:auto}th,td{padding:10px 11px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;min-width:95px}thead{background:#f0f4f7}th{color:#38465a}td:first-child{font-weight:550}
+#content ul.task-list{padding-left:0;list-style:none}#content .task-list-item{list-style:none;margin:7px 0;padding:8px 12px;border:1px solid var(--border);border-radius:7px;background:#fff;display:flex;align-items:flex-start;gap:10px}#content .task-list-item:hover{border-color:#b6c7c2}
+input[type=checkbox]{accent-color:var(--accent);width:17px;height:17px;min-width:17px;margin:4px 0 0;cursor:pointer}.task-done{background:var(--accentLight)!important}.task-done .task-label{text-decoration:line-through;color:#557567}
+.tracker{background:#fff;padding:18px 22px;margin-bottom:20px;border:1px solid var(--border);border-radius:12px;display:grid;gap:10px;}
+.progress-top{display:flex;justify-content:space-between;gap:10px;font-size:14px;font-weight:700}.meter{height:9px;border-radius:10px;background:#e6ebf0;overflow:hidden}#fill{width:0%;height:100%;background:var(--accent);transition:width .2s}#percent{color:var(--accent)}#hint{font-size:12px;color:var(--muted)}
+#notice{font-size:12px;color:var(--accent);min-width:80px}.mermaid-note{font-size:12px;color:var(--muted)}
+@media(max-width:700px){.wrapper{padding:12px 12px 50px}main{padding:22px 16px}.header-inner{padding:12px}h1{font-size:1.63rem}h2{font-size:1.29rem}}
+@media print{header,.tracker,.actions{display:none}body{background:white}main{border:0;box-shadow:none}}
+</style></head>
+<body><header><div class="header-inner"><div><div class="brand">OpenAvenues Project Roadmap</div><div class="sub">Interactive checklist · Offline friendly</div></div>
+<div class="actions"><span id="notice" role="status"></span><button id="copy">Copy updated Markdown</button><button class="primary" id="save">Save updated .md</button><button id="reset">Reset checks</button></div></div></header>
+<div class="wrapper"><section class="tracker" aria-label="Checklist progress"><div class="progress-top"><span>Milestone completion</span><span id="percent">0 / 17 · 0%</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="meter"><div id="fill"></div></div><span id="hint">Check items below to track progress. This page saves checks in your browser when available.</span></section>
+<main id="content"><h1>Data Engineering Project Roadmap</h1>
+<p><strong>Project:</strong> <a href="https://github.com/StevenG777/OpenAvenues-BuildProject-ETL-Data-Pipeline">OpenAvenues-BuildProject-ETL-Data-Pipeline</a><br />
+<strong>Goal:</strong> Evolve the current Airflow + MongoDB pipeline into a configuration-driven, privacy-aware, multi-environment data provisioning platform.</p>
+<blockquote>
+<p><strong>Core problem:</strong> How can a company automatically provision realistic, smaller, privacy-protected copies of production-like data into development, testing, staging, and sandbox environments while maintaining data integrity?</p>
+</blockquote>
+<h2>1. Current project foundation</h2>
+<p>Your project is more than a generic ETL demo: it already has a staged copy → sanitize → minimize → publish design. This roadmap distinguishes improvements to the existing pipeline from new capabilities.</p>
+<table>
+<thead>
+<tr>
+  <th>Component</th>
+  <th>Current / planned status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Orchestration</td>
+  <td>Apache Airflow, dynamic TaskGroups — implemented</td>
+</tr>
+<tr>
+  <td>MongoDB</td>
+  <td>PyMongo-driven database operations — implemented</td>
+</tr>
+<tr>
+  <td>Copying</td>
+  <td>Collection-level batch copying — implemented</td>
+</tr>
+<tr>
+  <td>Sanitization / obfuscation</td>
+  <td>Faker, regex redaction, salted hashing, perturbation — basic support</td>
+</tr>
+<tr>
+  <td>Minimization</td>
+  <td>MongoDB <code>$sample</code> — basic support</td>
+</tr>
+<tr>
+  <td>Configuration</td>
+  <td>YAML-driven stages and per-field strategy rules — implemented</td>
+</tr>
+<tr>
+  <td>Containerization</td>
+  <td>Airflow stack and MongoDB running in Docker — implemented locally</td>
+</tr>
+<tr>
+  <td>Nested transformation</td>
+  <td>Paths, arrays, arbitrary object keys — planned</td>
+</tr>
+<tr>
+  <td>PostgreSQL business-data pipeline</td>
+  <td>Planned</td>
+</tr>
+<tr>
+  <td>Cloud hosting and observability</td>
+  <td>Planned</td>
+</tr>
+</tbody>
+</table>
+<h2>2. Target architecture</h2>
+<pre><code class="language-mermaid">flowchart TD
+    A[Airflow: validate YAML and orchestrate stages] --&gt; B[MongoDB Production-like Source]
+    A --&gt; C[PostgreSQL Production-like Source]
+    B --&gt; D[Restricted Staging]
+    C --&gt; D
+    D --&gt; E[Sanitize / Obfuscate]
+    E --&gt; F[Minimize]
+    F --&gt; G{Quality and Privacy Gate}
+    G --&gt;|Pass| H[Publish MongoDB Dev / Test / Sandbox]
+    G --&gt;|Pass| I[Publish PostgreSQL Dev / Test / Sandbox]
+    G --&gt;|Fail| J[Fail run, preserve existing published data]
+    H --&gt; K[Metrics, lineage and audit report]
+    I --&gt; K
+</code></pre>
+<p><strong>Security boundary:</strong> Any staging location that holds unsanitized production-like data must be treated as restricted. Do not put raw confidential data in ordinary development infrastructure before sanitization.</p>
+<p><strong>Shared capabilities:</strong> Run IDs, audit metrics, validation, least-privilege access, structured logging, and automated tests.</p>
+<h2>3. Recommended development phases</h2>
+<table>
+<thead>
+<tr>
+  <th>Phase</th>
+  <th>Focus</th>
+  <th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>0</td>
+  <td>Reliability, safety, fail-fast behavior, safe publication</td>
+  <td>Critical</td>
+</tr>
+<tr>
+  <td>1</td>
+  <td>Advanced nested MongoDB transformations and pseudonymization</td>
+  <td>High</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td>Relationship-aware minimization and quality validation</td>
+  <td>High</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>Airflow automation, observability, testing, CI/CD</td>
+  <td>Medium–high</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>PostgreSQL provisioning and reusable adapters</td>
+  <td>Medium</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td>Cloud hosting, infrastructure as code, optional analytics / Kubernetes</td>
+  <td>Stretch</td>
+</tr>
+</tbody>
+</table>
+<h3>Phase 0 — Reliability before more complexity</h3>
+<table>
+<thead>
+<tr>
+  <th>Improvement</th>
+  <th>Why needed</th>
+  <th>High-level steps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Fail on unsuccessful writes <strong>(improve)</strong></td>
+  <td>Caught-and-printed batch exceptions can otherwise result in incomplete datasets and apparent success.</td>
+  <td>Raise exceptions, record failed batches and verify counts before publication.</td>
+</tr>
+<tr>
+  <td>Safe staging and replacement <strong>(improve)</strong></td>
+  <td>Clearing or replacing a destination before successful completion risks losing the previous valid dataset.</td>
+  <td>Write run-specific staging collections/tables, validate, then publish only on success.</td>
+</tr>
+<tr>
+  <td>Protect production data <strong>(improve)</strong></td>
+  <td>Checking only a particular database name is not a sufficient access-control boundary.</td>
+  <td>Read-only source credentials, explicit environment classification, destination allowlists, network isolation.</td>
+</tr>
+<tr>
+  <td>Correct cross-database behavior <strong>(bug fix)</strong></td>
+  <td>Source data must never be dropped during a source-to-destination transform.</td>
+  <td>Remove destructive source operations, add tests with different source/destination names.</td>
+</tr>
+<tr>
+  <td>Idempotency and retry safety <strong>(improve)</strong></td>
+  <td>Airflow retries can repeat operations.</td>
+  <td>Add run IDs, retry-safe writes, failure cleanup, deduplication / safe cutover semantics.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Acceptance test:</strong> Interrupt a copy midway; previous valid published data remains available, Airflow marks the step failed, and a retry completes without duplicates.</p>
+<h3>Phase 1 — Advanced MongoDB sanitization and obfuscation</h3>
+<h4>1.1 Nested field transformation engine (improve)</h4>
+<p><strong>Why:</strong> Financial-data documents contain nested objects, arrays of objects, arrays of primitive values, and unpredictable dictionary keys. A top-level <code>if field in doc</code> lookup cannot match these.</p>
+<p><strong>Proposed custom YAML syntax:</strong></p>
+<pre><code class="language-yaml">collections:
+  customers:
+    email:
+      strategy: redact
+      params: {preset: mask_email}
+    tier_and_details.*.benefits[*]:
+      strategy: redact
+      params: {preset: mask_all}
+    accounts[*]:
+      strategy: pseudonymize
+  transactions:
+    transactions[*].amount:
+      strategy: perturb
+      params: {noise_percent: 0.05}
+    transactions[*].symbol:
+      strategy: substitute
+      params: {field_type: stock_symbol}
+</code></pre>
+<p>These are rules for <strong>your own path resolver</strong>, not native MongoDB query syntax: <code>.</code> navigates nested fields, <code>*</code> matches arbitrary object keys, and <code>[*]</code> iterates array elements.</p>
+<p><strong>Steps:</strong> Build the path resolver → match leaf values → apply mapped strategies → preserve the outer document → test mixed nested lists and dictionaries.</p>
+<h4>1.2 Deterministic pseudonymization (improve)</h4>
+<p><strong>Why:</strong> Independently salted hashes of the same <code>account_id</code> break relationships between <code>customers.accounts</code>, <code>accounts.account_id</code>, and <code>transactions.account_id</code>.</p>
+<p><strong>Intended invariant:</strong> One original identifier maps to the same pseudonymous identifier across every collection in an environment (for example, <code>371138</code> → <code>acct_X7</code> everywhere).</p>
+<p><strong>Steps:</strong> Add a keyed deterministic mapping (e.g., HMAC-SHA256 or a secure mapping store), apply it to all references, keep the secret out of code/YAML, and test joins after transformations. Ordinary unsalted hashing is unsafe for predictable identifiers.</p>
+<h4>1.3 Complete sanitization operation library (improve)</h4>
+<p><strong>Why:</strong> <code>field_removal</code> and <code>doc_removal</code> currently act as placeholders in the shared code.</p>
+<p><strong>Steps:</strong> Define separate contracts for value replacement, field deletion and document exclusion; implement nullification, date shifting and masking; expose strategies through <code>maps_functions.py</code>; test edge cases.</p>
+<h4>1.4 BSON type awareness (new)</h4>
+<p><strong>Why:</strong> <code>datetime</code>, Boolean fields, numeric account IDs, and MongoDB <code>Decimal128</code> require different handling. A text redaction strategy must not silently corrupt field types.</p>
+<p><strong>Steps:</strong> Validate accepted input/output types per strategy, support native BSON values, reject incompatible operations, and document intentional type changes.</p>
+<h3>Phase 2 — Smarter minimization and data quality</h3>
+<h4>2.1 Relationship-aware sampling (improve)</h4>
+<p><strong>Why:</strong> Sampling <code>customers</code>, <code>accounts</code> and <code>transactions</code> independently may create dangling references.</p>
+<p><strong>Steps:</strong> Select root customers → collect referenced account IDs → select those accounts → collect related transaction documents → cap transaction volume if necessary → validate referential integrity.</p>
+<p>Provide both <strong>independent random sampling</strong> and <strong>relationship-preserving sampling</strong> modes.</p>
+<h4>2.2 Nested array minimization (new)</h4>
+<p><strong>Why:</strong> An individual <code>transactions</code> document contains a long array of entries, even when top-level document counts are small.</p>
+<p><strong>Steps:</strong> Implement array <code>limit</code>, <code>sample</code> and <code>date_window</code> rules through the nested-path engine; recompute derived fields like <code>transaction_count</code> when required by their meaning.</p>
+<h4>2.3 Privacy and data quality gates (new)</h4>
+<table>
+<thead>
+<tr>
+  <th>Check</th>
+  <th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Structural</td>
+  <td>All required account fields are present.</td>
+</tr>
+<tr>
+  <td>Type</td>
+  <td>Date fields remain dates, expected numeric fields remain numeric.</td>
+</tr>
+<tr>
+  <td>Relationships</td>
+  <td>Retained customer/account/transaction references resolve.</td>
+</tr>
+<tr>
+  <td>Privacy</td>
+  <td>Sensitive fields have the configured approved transforms.</td>
+</tr>
+<tr>
+  <td>Volume</td>
+  <td>Dataset satisfies row and byte limits.</td>
+</tr>
+<tr>
+  <td>Completeness</td>
+  <td>Expected collections processed without skipped failures.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Steps:</strong> Validate configs with Pydantic; add dataset assertions and privacy tests; create an Airflow validation TaskGroup that must pass before publication. Schema validation does not, on its own, prove privacy safety.</p>
+<h4>2.4 Schema profiling and sanitization coverage (new)</h4>
+<p><strong>Why:</strong> Sensitive fields may be added to MongoDB collections without a matching YAML rule.</p>
+<p><strong>Steps:</strong> Profile schema paths and types, identify potential sensitive fields, compare them against policy coverage, and report uncovered paths without logging sensitive raw values.</p>
+<h3>Phase 3 — Airflow automation and engineering practices</h3>
+<table>
+<thead>
+<tr>
+  <th>Feature</th>
+  <th>Why needed</th>
+  <th>High-level steps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Automated data refresh <strong>(new)</strong></td>
+  <td>Development data becomes outdated.</td>
+  <td>Schedule refresh, compare full vs incremental refresh, use watermarks and concurrency controls.</td>
+</tr>
+<tr>
+  <td>Observability / audit logging <strong>(new)</strong></td>
+  <td>Operators need counts, timings and failure details.</td>
+  <td>Structured logs, run IDs, metrics for copied/transformed/rejected/published rows, alerts.</td>
+</tr>
+<tr>
+  <td>Automated testing and CI/CD <strong>(improve)</strong></td>
+  <td>New strategies can silently introduce regressions.</td>
+  <td>Unit and integration tests, DAG import tests, GitHub Actions lint/test/config checks.</td>
+</tr>
+<tr>
+  <td>Config validation <strong>(improve)</strong></td>
+  <td>Invalid YAML must fail before accessing data.</td>
+  <td>Pydantic models for source/destination, percentages, nested path syntax and strategies.</td>
+</tr>
+<tr>
+  <td>Environment security <strong>(improve)</strong></td>
+  <td>Online deployment requires production-grade isolation.</td>
+  <td>Secrets outside Git, authenticated MongoDB, TLS, least-privilege credentials, private network.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Proposed execution stages:</strong> Copy → Sanitize/Obfuscate → Minimize → Validate → Publish → Generate Report → Clean up restricted staging.</p>
+<h3>Phase 4 — PostgreSQL and reusable database design</h3>
+<h4>4.1 PostgreSQL-to-PostgreSQL provisioning (new)</h4>
+<p><strong>Why:</strong> SQL adds normalized schemas, transactions, foreign-key constraints and migrations.</p>
+<p><strong>Illustrative modeling:</strong></p>
+<table>
+<thead>
+<tr>
+  <th>MongoDB</th>
+  <th>PostgreSQL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>customers</code></td>
+  <td><code>customers</code>, <code>customer_accounts</code>, <code>customer_tiers</code></td>
+</tr>
+<tr>
+  <td><code>accounts</code></td>
+  <td><code>accounts</code>, <code>account_products</code></td>
+</tr>
+<tr>
+  <td><code>transactions</code></td>
+  <td><code>transaction_buckets</code>, <code>transaction_entries</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Steps:</strong> Design relational schema, load equivalent finance-domain records, implement extraction and transformations using psycopg or SQLAlchemy, preserve referential integrity during pseudonymization/sampling, and run SQL checks.</p>
+<p>Keep <strong>Airflow's metadata PostgreSQL</strong> independent of business-data PostgreSQL.</p>
+<h4>4.2 Database adapter interfaces (new)</h4>
+<p><strong>Why:</strong> Shared configuration and orchestration should not imply identical MongoDB and SQL access code.</p>
+<p><strong>Steps:</strong> Define read, batch write, staging, publish and validation interfaces; implement MongoDB and PostgreSQL adapters; reuse business rules but isolate database-specific operations.</p>
+<h3>Phase 5 — Cloud deployment and optional extensions</h3>
+<table>
+<thead>
+<tr>
+  <th>Feature</th>
+  <th>Why needed</th>
+  <th>High-level steps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Cloud hosting <strong>(new)</strong></td>
+  <td>Demonstrate an always-accessible working system.</td>
+  <td>Container deployment and/or managed databases, secure networking, credentials and persistence.</td>
+</tr>
+<tr>
+  <td>Infrastructure as code <strong>(new)</strong></td>
+  <td>Reproducible environments.</td>
+  <td>Model networks, compute, secrets and data services in Terraform or equivalent.</td>
+</tr>
+<tr>
+  <td>Warehouse and analytics <strong>(optional)</strong></td>
+  <td>Show downstream analytical use cases.</td>
+  <td>Export suitable transformed data into analytic tables and dashboard summaries.</td>
+</tr>
+<tr>
+  <td>Kubernetes <strong>(optional)</strong></td>
+  <td>Practice cluster operations and scaling.</td>
+  <td>Only after simple cloud deployment works: Helm, secrets, storage, worker scaling.</td>
+</tr>
+</tbody>
+</table>
+<p>Do not expose an unmodified local-development Airflow Compose stack directly to the public internet. Kubernetes is a stretch goal, not the immediate bottleneck.</p>
+<h2>4. File-by-file implementation map</h2>
+<table>
+<thead>
+<tr>
+  <th>File</th>
+  <th>Recommended evolution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>pipeline_configs.yml</code></td>
+  <td>Nested rules, relationship sampling, privacy/quality policy, refresh settings.</td>
+</tr>
+<tr>
+  <td><code>pipeline_functions.py</code></td>
+  <td>New strategies, deletion semantics, type awareness, array minimization.</td>
+</tr>
+<tr>
+  <td><code>maps_fields.py</code></td>
+  <td>Add realistic synthetic data categories and masking presets.</td>
+</tr>
+<tr>
+  <td><code>maps_functions.py</code></td>
+  <td>Maintain strategy registry and rule dispatch; route nested leaves correctly.</td>
+</tr>
+<tr>
+  <td><code>database_operations.py</code></td>
+  <td>Fail-fast writes, restricted source access, staging, validate-before-publish.</td>
+</tr>
+<tr>
+  <td><code>ETL_pipeline.py</code></td>
+  <td>Validation/publishing groups, metrics, refresh and clear failure reporting.</td>
+</tr>
+<tr>
+  <td><code>utilities.py</code></td>
+  <td>Shared config, batch size, logging and connection helpers.</td>
+</tr>
+<tr>
+  <td><code>data.py</code></td>
+  <td>Environment-specific connection settings and secret management.</td>
+</tr>
+<tr>
+  <td><code>tests/</code></td>
+  <td>Unit, integration, failure-injection and end-to-end tests.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Possible new modules:</strong> <code>nested_paths.py</code>, <code>config_models.py</code>, <code>data_validation.py</code>, <code>database_adapters/</code>.</p>
+<h2>5. Project milestones — interactive task checklist</h2>
+<p>The checkboxes in this Markdown are GitHub-compatible. In a README you normally edit the Markdown to change <code>[ ]</code> to <code>[x]</code>; GitHub Issues and pull requests offer interactive task checkboxes. For a self-contained browser checklist with automatic progress tracking, use the accompanying HTML file.</p>
+<h3>Milestone 1 — Reliability</h3>
+<ul>
+<li class="task-list-item"><input data-task="1" class="task-list-item-checkbox" type="checkbox"/>Fail Airflow tasks on incomplete writes</li>
+<li class="task-list-item"><input data-task="2" class="task-list-item-checkbox" type="checkbox"/>Implement safe staging and publishing</li>
+<li class="task-list-item"><input data-task="3" class="task-list-item-checkbox" type="checkbox"/>Protect production through credentials and access controls</li>
+</ul>
+<h3>Milestone 2 — Transformation engine</h3>
+<ul>
+<li class="task-list-item"><input data-task="4" class="task-list-item-checkbox" type="checkbox"/>Support nested dictionary paths and wildcards</li>
+<li class="task-list-item"><input data-task="5" class="task-list-item-checkbox" type="checkbox"/>Support arrays of objects and primitive values</li>
+<li class="task-list-item"><input data-task="6" class="task-list-item-checkbox" type="checkbox"/>Implement deterministic account-ID pseudonymization</li>
+<li class="task-list-item"><input data-task="7" class="task-list-item-checkbox" type="checkbox"/>Finish removal strategies and BSON type handling</li>
+</ul>
+<h3>Milestone 3 — Data integrity</h3>
+<ul>
+<li class="task-list-item"><input data-task="8" class="task-list-item-checkbox" type="checkbox"/>Implement relationship-aware sampling</li>
+<li class="task-list-item"><input data-task="9" class="task-list-item-checkbox" type="checkbox"/>Implement nested array minimization</li>
+<li class="task-list-item"><input data-task="10" class="task-list-item-checkbox" type="checkbox"/>Add schema, privacy, and referential-integrity validation</li>
+</ul>
+<h3>Milestone 4 — Automation</h3>
+<ul>
+<li class="task-list-item"><input data-task="11" class="task-list-item-checkbox" type="checkbox"/>Implement a refresh workflow</li>
+<li class="task-list-item"><input data-task="12" class="task-list-item-checkbox" type="checkbox"/>Add metrics, audit logs, and failure reporting</li>
+<li class="task-list-item"><input data-task="13" class="task-list-item-checkbox" type="checkbox"/>Expand tests and enable GitHub Actions</li>
+</ul>
+<h3>Milestone 5 — Expansion</h3>
+<ul>
+<li class="task-list-item"><input data-task="14" class="task-list-item-checkbox" type="checkbox"/>Build PostgreSQL business-data pipeline</li>
+<li class="task-list-item"><input data-task="15" class="task-list-item-checkbox" type="checkbox"/>Add common database adapter interfaces</li>
+<li class="task-list-item"><input data-task="16" class="task-list-item-checkbox" type="checkbox"/>Deploy a secured cloud demonstration</li>
+<li class="task-list-item"><input data-task="17" class="task-list-item-checkbox" type="checkbox"/>Optionally build analytics warehouse/dashboard</li>
+</ul>
+<h2>6. Measurable acceptance criteria</h2>
+<table>
+<thead>
+<tr>
+  <th>Metric</th>
+  <th>Example standard</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Transformation coverage</td>
+  <td>All configured sensitive paths handled or flagged.</td>
+</tr>
+<tr>
+  <td>Referential integrity</td>
+  <td>No dangling references in the published subset.</td>
+</tr>
+<tr>
+  <td>Failure behavior</td>
+  <td>Failed operations fail the Airflow run; existing target preserved.</td>
+</tr>
+<tr>
+  <td>Idempotency</td>
+  <td>Rerunning does not duplicate published records.</td>
+</tr>
+<tr>
+  <td>Dataset reduction</td>
+  <td>Row/byte budget achieved or exception reported.</td>
+</tr>
+<tr>
+  <td>BSON type handling</td>
+  <td>Fields required to retain their types pass validation.</td>
+</tr>
+<tr>
+  <td>Reproducibility</td>
+  <td>A new developer can deploy locally from documented instructions.</td>
+</tr>
+</tbody>
+</table>
+<h2>7. Recommended immediate priorities</h2>
+<ol>
+<li><strong>Safety and fail-fast behavior:</strong> preserve valid target data across partial failures.</li>
+<li><strong>Nested transformations and consistent ID mapping:</strong> sanitize complex MongoDB structures without breaking relationships.</li>
+<li><strong>Relationship-aware minimization and validation:</strong> generate a small, useful, test-ready subset.</li>
+</ol>
+<p>After those succeed, PostgreSQL will extend a reliable common framework rather than duplicate a prototype.</p>
+<h3>Suggested portfolio description</h3>
+<blockquote>
+<p><strong>Configuration-Driven, Privacy-Aware Data Provisioning Platform:</strong> Designed an Apache Airflow-orchestrated system to provision sanitized, relationship-preserving, minimized production-like datasets to non-production environments, with YAML-driven policies, validation, automated refresh, and containerized deployment.</p>
+</blockquote>
+<hr />
+<p><em>Roadmap planning document. Recommendations are staged goals, not claims that all described capabilities are already built.</em></p>
+</main></div>
+<script id="markdown-source" type="application/json">"# Data Engineering Project Roadmap\n\n**Project:** [OpenAvenues-BuildProject-ETL-Data-Pipeline](https://github.com/StevenG777/OpenAvenues-BuildProject-ETL-Data-Pipeline)  \n**Goal:** Evolve the current Airflow + MongoDB pipeline into a configuration-driven, privacy-aware, multi-environment data provisioning platform.\n\n> **Core problem:** How can a company automatically provision realistic, smaller, privacy-protected copies of production-like data into development, testing, staging, and sandbox environments while maintaining data integrity?\n\n## 1. Current project foundation\n\nYour project is more than a generic ETL demo: it already has a staged copy \u2192 sanitize \u2192 minimize \u2192 publish design. This roadmap distinguishes improvements to the existing pipeline from new capabilities.\n\n| Component | Current / planned status |\n| --- | --- |\n| Orchestration | Apache Airflow, dynamic TaskGroups \u2014 implemented |\n| MongoDB | PyMongo-driven database operations \u2014 implemented |\n| Copying | Collection-level batch copying \u2014 implemented |\n| Sanitization / obfuscation | Faker, regex redaction, salted hashing, perturbation \u2014 basic support |\n| Minimization | MongoDB `$sample` \u2014 basic support |\n| Configuration | YAML-driven stages and per-field strategy rules \u2014 implemented |\n| Containerization | Airflow stack and MongoDB running in Docker \u2014 implemented locally |\n| Nested transformation | Paths, arrays, arbitrary object keys \u2014 planned |\n| PostgreSQL business-data pipeline | Planned |\n| Cloud hosting and observability | Planned |\n\n## 2. Target architecture\n\n```mermaid\nflowchart TD\n    A[Airflow: validate YAML and orchestrate stages] --> B[MongoDB Production-like Source]\n    A --> C[PostgreSQL Production-like Source]\n    B --> D[Restricted Staging]\n    C --> D\n    D --> E[Sanitize / Obfuscate]\n    E --> F[Minimize]\n    F --> G{Quality and Privacy Gate}\n    G -->|Pass| H[Publish MongoDB Dev / Test / Sandbox]\n    G -->|Pass| I[Publish PostgreSQL Dev / Test / Sandbox]\n    G -->|Fail| J[Fail run, preserve existing published data]\n    H --> K[Metrics, lineage and audit report]\n    I --> K\n```\n\n**Security boundary:** Any staging location that holds unsanitized production-like data must be treated as restricted. Do not put raw confidential data in ordinary development infrastructure before sanitization.\n\n**Shared capabilities:** Run IDs, audit metrics, validation, least-privilege access, structured logging, and automated tests.\n\n## 3. Recommended development phases\n\n| Phase | Focus | Priority |\n| --- | --- | --- |\n| 0 | Reliability, safety, fail-fast behavior, safe publication | Critical |\n| 1 | Advanced nested MongoDB transformations and pseudonymization | High |\n| 2 | Relationship-aware minimization and quality validation | High |\n| 3 | Airflow automation, observability, testing, CI/CD | Medium\u2013high |\n| 4 | PostgreSQL provisioning and reusable adapters | Medium |\n| 5 | Cloud hosting, infrastructure as code, optional analytics / Kubernetes | Stretch |\n\n### Phase 0 \u2014 Reliability before more complexity\n\n| Improvement | Why needed | High-level steps |\n| --- | --- | --- |\n| Fail on unsuccessful writes **(improve)** | Caught-and-printed batch exceptions can otherwise result in incomplete datasets and apparent success. | Raise exceptions, record failed batches and verify counts before publication. |\n| Safe staging and replacement **(improve)** | Clearing or replacing a destination before successful completion risks losing the previous valid dataset. | Write run-specific staging collections/tables, validate, then publish only on success. |\n| Protect production data **(improve)** | Checking only a particular database name is not a sufficient access-control boundary. | Read-only source credentials, explicit environment classification, destination allowlists, network isolation. |\n| Correct cross-database behavior **(bug fix)** | Source data must never be dropped during a source-to-destination transform. | Remove destructive source operations, add tests with different source/destination names. |\n| Idempotency and retry safety **(improve)** | Airflow retries can repeat operations. | Add run IDs, retry-safe writes, failure cleanup, deduplication / safe cutover semantics. |\n\n**Acceptance test:** Interrupt a copy midway; previous valid published data remains available, Airflow marks the step failed, and a retry completes without duplicates.\n\n### Phase 1 \u2014 Advanced MongoDB sanitization and obfuscation\n\n#### 1.1 Nested field transformation engine (improve)\n\n**Why:** Financial-data documents contain nested objects, arrays of objects, arrays of primitive values, and unpredictable dictionary keys. A top-level `if field in doc` lookup cannot match these.\n\n**Proposed custom YAML syntax:**\n\n```yaml\ncollections:\n  customers:\n    email:\n      strategy: redact\n      params: {preset: mask_email}\n    tier_and_details.*.benefits[*]:\n      strategy: redact\n      params: {preset: mask_all}\n    accounts[*]:\n      strategy: pseudonymize\n  transactions:\n    transactions[*].amount:\n      strategy: perturb\n      params: {noise_percent: 0.05}\n    transactions[*].symbol:\n      strategy: substitute\n      params: {field_type: stock_symbol}\n```\n\nThese are rules for **your own path resolver**, not native MongoDB query syntax: `.` navigates nested fields, `*` matches arbitrary object keys, and `[*]` iterates array elements.\n\n**Steps:** Build the path resolver \u2192 match leaf values \u2192 apply mapped strategies \u2192 preserve the outer document \u2192 test mixed nested lists and dictionaries.\n\n#### 1.2 Deterministic pseudonymization (improve)\n\n**Why:** Independently salted hashes of the same `account_id` break relationships between `customers.accounts`, `accounts.account_id`, and `transactions.account_id`.\n\n**Intended invariant:** One original identifier maps to the same pseudonymous identifier across every collection in an environment (for example, `371138` \u2192 `acct_X7` everywhere).\n\n**Steps:** Add a keyed deterministic mapping (e.g., HMAC-SHA256 or a secure mapping store), apply it to all references, keep the secret out of code/YAML, and test joins after transformations. Ordinary unsalted hashing is unsafe for predictable identifiers.\n\n#### 1.3 Complete sanitization operation library (improve)\n\n**Why:** `field_removal` and `doc_removal` currently act as placeholders in the shared code.\n\n**Steps:** Define separate contracts for value replacement, field deletion and document exclusion; implement nullification, date shifting and masking; expose strategies through `maps_functions.py`; test edge cases.\n\n#### 1.4 BSON type awareness (new)\n\n**Why:** `datetime`, Boolean fields, numeric account IDs, and MongoDB `Decimal128` require different handling. A text redaction strategy must not silently corrupt field types.\n\n**Steps:** Validate accepted input/output types per strategy, support native BSON values, reject incompatible operations, and document intentional type changes.\n\n### Phase 2 \u2014 Smarter minimization and data quality\n\n#### 2.1 Relationship-aware sampling (improve)\n\n**Why:** Sampling `customers`, `accounts` and `transactions` independently may create dangling references.\n\n**Steps:** Select root customers \u2192 collect referenced account IDs \u2192 select those accounts \u2192 collect related transaction documents \u2192 cap transaction volume if necessary \u2192 validate referential integrity.\n\nProvide both **independent random sampling** and **relationship-preserving sampling** modes.\n\n#### 2.2 Nested array minimization (new)\n\n**Why:** An individual `transactions` document contains a long array of entries, even when top-level document counts are small.\n\n**Steps:** Implement array `limit`, `sample` and `date_window` rules through the nested-path engine; recompute derived fields like `transaction_count` when required by their meaning.\n\n#### 2.3 Privacy and data quality gates (new)\n\n| Check | Example |\n| --- | --- |\n| Structural | All required account fields are present. |\n| Type | Date fields remain dates, expected numeric fields remain numeric. |\n| Relationships | Retained customer/account/transaction references resolve. |\n| Privacy | Sensitive fields have the configured approved transforms. |\n| Volume | Dataset satisfies row and byte limits. |\n| Completeness | Expected collections processed without skipped failures. |\n\n**Steps:** Validate configs with Pydantic; add dataset assertions and privacy tests; create an Airflow validation TaskGroup that must pass before publication. Schema validation does not, on its own, prove privacy safety.\n\n#### 2.4 Schema profiling and sanitization coverage (new)\n\n**Why:** Sensitive fields may be added to MongoDB collections without a matching YAML rule.\n\n**Steps:** Profile schema paths and types, identify potential sensitive fields, compare them against policy coverage, and report uncovered paths without logging sensitive raw values.\n\n### Phase 3 \u2014 Airflow automation and engineering practices\n\n| Feature | Why needed | High-level steps |\n| --- | --- | --- |\n| Automated data refresh **(new)** | Development data becomes outdated. | Schedule refresh, compare full vs incremental refresh, use watermarks and concurrency controls. |\n| Observability / audit logging **(new)** | Operators need counts, timings and failure details. | Structured logs, run IDs, metrics for copied/transformed/rejected/published rows, alerts. |\n| Automated testing and CI/CD **(improve)** | New strategies can silently introduce regressions. | Unit and integration tests, DAG import tests, GitHub Actions lint/test/config checks. |\n| Config validation **(improve)** | Invalid YAML must fail before accessing data. | Pydantic models for source/destination, percentages, nested path syntax and strategies. |\n| Environment security **(improve)** | Online deployment requires production-grade isolation. | Secrets outside Git, authenticated MongoDB, TLS, least-privilege credentials, private network. |\n\n**Proposed execution stages:** Copy \u2192 Sanitize/Obfuscate \u2192 Minimize \u2192 Validate \u2192 Publish \u2192 Generate Report \u2192 Clean up restricted staging.\n\n### Phase 4 \u2014 PostgreSQL and reusable database design\n\n#### 4.1 PostgreSQL-to-PostgreSQL provisioning (new)\n\n**Why:** SQL adds normalized schemas, transactions, foreign-key constraints and migrations.\n\n**Illustrative modeling:**\n\n| MongoDB | PostgreSQL |\n| --- | --- |\n| `customers` | `customers`, `customer_accounts`, `customer_tiers` |\n| `accounts` | `accounts`, `account_products` |\n| `transactions` | `transaction_buckets`, `transaction_entries` |\n\n**Steps:** Design relational schema, load equivalent finance-domain records, implement extraction and transformations using psycopg or SQLAlchemy, preserve referential integrity during pseudonymization/sampling, and run SQL checks.\n\nKeep **Airflow's metadata PostgreSQL** independent of business-data PostgreSQL.\n\n#### 4.2 Database adapter interfaces (new)\n\n**Why:** Shared configuration and orchestration should not imply identical MongoDB and SQL access code.\n\n**Steps:** Define read, batch write, staging, publish and validation interfaces; implement MongoDB and PostgreSQL adapters; reuse business rules but isolate database-specific operations.\n\n### Phase 5 \u2014 Cloud deployment and optional extensions\n\n| Feature | Why needed | High-level steps |\n| --- | --- | --- |\n| Cloud hosting **(new)** | Demonstrate an always-accessible working system. | Container deployment and/or managed databases, secure networking, credentials and persistence. |\n| Infrastructure as code **(new)** | Reproducible environments. | Model networks, compute, secrets and data services in Terraform or equivalent. |\n| Warehouse and analytics **(optional)** | Show downstream analytical use cases. | Export suitable transformed data into analytic tables and dashboard summaries. |\n| Kubernetes **(optional)** | Practice cluster operations and scaling. | Only after simple cloud deployment works: Helm, secrets, storage, worker scaling. |\n\nDo not expose an unmodified local-development Airflow Compose stack directly to the public internet. Kubernetes is a stretch goal, not the immediate bottleneck.\n\n## 4. File-by-file implementation map\n\n| File | Recommended evolution |\n| --- | --- |\n| `pipeline_configs.yml` | Nested rules, relationship sampling, privacy/quality policy, refresh settings. |\n| `pipeline_functions.py` | New strategies, deletion semantics, type awareness, array minimization. |\n| `maps_fields.py` | Add realistic synthetic data categories and masking presets. |\n| `maps_functions.py` | Maintain strategy registry and rule dispatch; route nested leaves correctly. |\n| `database_operations.py` | Fail-fast writes, restricted source access, staging, validate-before-publish. |\n| `ETL_pipeline.py` | Validation/publishing groups, metrics, refresh and clear failure reporting. |\n| `utilities.py` | Shared config, batch size, logging and connection helpers. |\n| `data.py` | Environment-specific connection settings and secret management. |\n| `tests/` | Unit, integration, failure-injection and end-to-end tests. |\n\n**Possible new modules:** `nested_paths.py`, `config_models.py`, `data_validation.py`, `database_adapters/`.\n\n## 5. Project milestones \u2014 interactive task checklist\n\nThe checkboxes in this Markdown are GitHub-compatible. In a README you normally edit the Markdown to change `[ ]` to `[x]`; GitHub Issues and pull requests offer interactive task checkboxes. For a self-contained browser checklist with automatic progress tracking, use the accompanying HTML file.\n\n### Milestone 1 \u2014 Reliability\n\n- [ ] Fail Airflow tasks on incomplete writes\n- [ ] Implement safe staging and publishing\n- [ ] Protect production through credentials and access controls\n\n### Milestone 2 \u2014 Transformation engine\n\n- [ ] Support nested dictionary paths and wildcards\n- [ ] Support arrays of objects and primitive values\n- [ ] Implement deterministic account-ID pseudonymization\n- [ ] Finish removal strategies and BSON type handling\n\n### Milestone 3 \u2014 Data integrity\n\n- [ ] Implement relationship-aware sampling\n- [ ] Implement nested array minimization\n- [ ] Add schema, privacy, and referential-integrity validation\n\n### Milestone 4 \u2014 Automation\n\n- [ ] Implement a refresh workflow\n- [ ] Add metrics, audit logs, and failure reporting\n- [ ] Expand tests and enable GitHub Actions\n\n### Milestone 5 \u2014 Expansion\n\n- [ ] Build PostgreSQL business-data pipeline\n- [ ] Add common database adapter interfaces\n- [ ] Deploy a secured cloud demonstration\n- [ ] Optionally build analytics warehouse/dashboard\n\n## 6. Measurable acceptance criteria\n\n| Metric | Example standard |\n| --- | --- |\n| Transformation coverage | All configured sensitive paths handled or flagged. |\n| Referential integrity | No dangling references in the published subset. |\n| Failure behavior | Failed operations fail the Airflow run; existing target preserved. |\n| Idempotency | Rerunning does not duplicate published records. |\n| Dataset reduction | Row/byte budget achieved or exception reported. |\n| BSON type handling | Fields required to retain their types pass validation. |\n| Reproducibility | A new developer can deploy locally from documented instructions. |\n\n## 7. Recommended immediate priorities\n\n1. **Safety and fail-fast behavior:** preserve valid target data across partial failures.\n2. **Nested transformations and consistent ID mapping:** sanitize complex MongoDB structures without breaking relationships.\n3. **Relationship-aware minimization and validation:** generate a small, useful, test-ready subset.\n\nAfter those succeed, PostgreSQL will extend a reliable common framework rather than duplicate a prototype.\n\n### Suggested portfolio description\n\n> **Configuration-Driven, Privacy-Aware Data Provisioning Platform:** Designed an Apache Airflow-orchestrated system to provision sanitized, relationship-preserving, minimized production-like datasets to non-production environments, with YAML-driven policies, validation, automated refresh, and containerized deployment.\n\n---\n\n*Roadmap planning document. Recommendations are staged goals, not claims that all described capabilities are already built.*\n"</script>
+<script>
+(()=>{
+const source=JSON.parse(document.getElementById('markdown-source').textContent);
+const boxes=[...document.querySelectorAll('#content input[type="checkbox"]')];
+const KEY='openavenues-roadmap-checklist-v1';
+let saved={};
+try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+const mark=(el)=>{
+const li=el.closest('li');if(!li)return;
+li.classList.toggle('task-done',el.checked);
+};
+const progress=()=>{
+const n=boxes.filter(x=>x.checked).length, t=boxes.length, pct=t?Math.round(n/t*100):0;
+document.getElementById('percent').textContent=`${n} / ${t} · ${pct}%`;
+document.getElementById('fill').style.width=pct+'%';
+document.getElementById('meter').setAttribute('aria-valuenow',pct);
+};
+boxes.forEach((x,i)=>{
+  const label=document.createElement('span');label.className='task-label';
+  const li=x.closest('li');if(li){
+    while(x.nextSibling)label.appendChild(x.nextSibling);
+    li.appendChild(label);
+  }
+  x.checked=Boolean(saved[i]);mark(x);
+  x.addEventListener('change',()=>{saved[i]=x.checked;mark(x);progress();try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(e){}});
+});progress();
+function currentMarkdown(){
+let index=0;
+return source.replace(/^([ \t]*- )\[[ xX]\](?= )/gm,(m,p)=>p+'['+(boxes[index++]?.checked?'x':' ')+']');
+}
+function notice(t){const n=document.getElementById('notice');n.textContent=t;}
+document.getElementById('copy').addEventListener('click',async()=>{
+ try{await navigator.clipboard.writeText(currentMarkdown());notice('Copied');}
+ catch(e){notice('Use Save updated .md');}
+});
+document.getElementById('save').addEventListener('click',()=>{
+ const blob=new Blob([currentMarkdown()],{type:'text/markdown;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');
+ a.href=url;a.download='OpenAvenues_Project_Roadmap_Updated.md';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+ notice('Saved');
+});
+document.getElementById('reset').addEventListener('click',()=>{
+ if(!confirm('Clear all checklist progress?'))return;
+ saved={};boxes.forEach(x=>{x.checked=false;mark(x)});progress();try{localStorage.removeItem(KEY)}catch(e){}notice('Reset');
+});
+})();
+</script></body></html>
